@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import dev.dstankovic.popularmovies.BuildConfig;
 import dev.dstankovic.popularmovies.model.GenreObject;
@@ -27,11 +29,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String API_KEY = BuildConfig.THEMOVIEDB_API_KEY;
     private CompositeDisposable disposables = new CompositeDisposable();
     private ApiInterface api;
+    private RecyclerView mRecyclerView;
+    private RecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mRecyclerView = findViewById(R.id.recycler_view);
+
+        initRecyclerView();
 
         api = ApiClient.getClient().create(ApiInterface.class);
 
@@ -53,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(Movie movie) {
                         Log.d(TAG, "We are inside getMoviesObservable(): " + movie.getTitle());
+                        adapter.updateMovie(movie);
                     }
 
                     @Override
@@ -65,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void initRecyclerView() {
+        adapter = new RecyclerAdapter();
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setAdapter(adapter);
     }
 
     private Observable<Movie> getGenresObservable(final Movie movie) {
@@ -89,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public ObservableSource<Movie> apply(MovieObject movieObject) throws Exception {
                         // this is where you can add movies to RecyclerView
-                        Log.d(TAG, "Inside getMoviesObservable(): " + movieObject.getMovies().size());
+                        adapter.setMovies(movieObject.getMovies());
                         return Observable.fromIterable(movieObject.getMovies())
                                 .subscribeOn(Schedulers.io());
                     }
