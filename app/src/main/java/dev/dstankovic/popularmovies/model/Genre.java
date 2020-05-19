@@ -1,15 +1,23 @@
 package dev.dstankovic.popularmovies.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Genre {
 
-    private long id;
+    @SerializedName("id")
+    @Expose
+    private int id;
+
+    @SerializedName("name")
+    @Expose
     private String name;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
