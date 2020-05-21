@@ -1,4 +1,4 @@
-package dev.dstankovic.popularmovies.model;
+package dev.dstankovic.popularmovies.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

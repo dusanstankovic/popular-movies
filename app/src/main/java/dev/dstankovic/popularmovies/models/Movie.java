@@ -1,4 +1,4 @@
-package dev.dstankovic.popularmovies.model;
+package dev.dstankovic.popularmovies.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -46,9 +46,6 @@ public class Movie {
     @SerializedName("genre_ids")
     @Expose
     private List<Integer> genreIds = null;
-
-    // convert genre IDs to Genre objects
-    private List<Genre> genres = null;
 
     @SerializedName("title")
     @Expose
@@ -144,19 +141,6 @@ public class Movie {
 
     public void setGenreIds(List<Integer> genreIds) {
         this.genreIds = genreIds;
-    }
-
-    public List<Genre> getGenres() {
-        return genres;
-    }
-
-    public void setGenres(List<Integer> genreIds) {
-        List<Genre> genres = new GenreObject().getGenres();
-        for (Genre genre : genres) {
-            if (genreIds.contains(genre.getId())){
-                this.genres.add(genre);
-            }
-        }
     }
 
     public String getTitle() {
